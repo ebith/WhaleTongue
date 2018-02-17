@@ -1,0 +1,114 @@
+@import "~office-ui-fabric-react/dist/sass/_References.scss";
+
+// Do not download web font on MacOS
+.css-32 {
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Segoe UI', sans-serif !important;
+}
+
+.tweet-itemCell {
+  box-sizing: border-box;
+  border-bottom: 1px solid $ms-color-neutralTertiaryAlt;
+  display: flex;
+}
+
+.tweet-itemCell:hover {
+  background: #EEE;
+}
+
+.tweet-itemContent {
+  margin-left: 10px;
+  overflow: hidden;
+  flex-grow: 1;
+}
+
+.tweet-name {
+  text-decoration-line: none;
+  color: $ms-color-neutralPrimary;
+}
+
+.tweet-screen_name {
+  text-decoration-line: none;
+  color: $ms-color-neutralSecondary;
+  margin: 0 0 0 2px;
+  font-size: $ms-font-size-s-plus;
+}
+
+.tweet-profile-image {
+  height: 100%;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  img {
+    border-radius: 4px;
+  }
+}
+
+.tweet-content {
+  margin-top: -3px;
+}
+
+.tooLong {
+  font-size: $ms-font-size-m-plus - 1px;
+}
+
+.long {
+  font-size: $ms-font-size-m-plus - 0.5px;
+}
+
+.short {
+  font-size: $ms-font-size-m-plus + 2px;
+}
+
+.tooShort {
+  font-size: $ms-font-size-m-plus + 7px;
+}
+
+.fuckingShort {
+  font-size: $ms-font-size-m-plus + 9px;
+}
+
+.media-video {
+  position: relative;
+
+  .fa-play-circle {
+    color: $ms-color-neutralLight;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -175%);
+    margin: 0;
+    padding: 0;
+    font-size: 60px;
+    &:hover {
+      color: $ms-color-neutralLighter;
+    }
+  }
+
+}
+
+.external-media {
+  img {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+.tweet-text {
+  color: $ms-color-neutralDark;
+  word-break: break-all;
+}
+
+.ogp-thumbnail {
+  img {
+    max-height: 150px;
+    width: auto;
+  }
+}
+
+.tweet-extra {
+  margin-bottom: -3px;
+  float: right;
+  a {
+    text-decoration-line: none;
+    color: $ms-color-neutralSecondary;
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "name": "WhaleTongue",
+  "version": "0.1.0",
+  "main": "dist/main.js",
+  "author": "ebith",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "@babel/core": "^7.0.0-beta.39",
+    "@babel/preset-env": "^7.0.0-beta.39",
+    "@babel/preset-react": "^7.0.0-beta.39",
+    "babel-loader": "^8.0.0-beta.0",
+    "chokidar": "^2.0.1",
+    "css-loader": "^0.28.9",
+    "electron-connect": "^0.6.3",
+    "electron-packager": "^11.0.1",
+    "node-sass": "^4.7.2",
+    "npm-run-all": "^4.1.2",
+    "prettier": "^1.10.2",
+    "sass-loader": "^6.0.6",
+    "style-loader": "^0.20.1",
+    "uglifyjs-webpack-plugin": "^1.1.8",
+    "webpack": "^3.11.0",
+    "webpack-cli": "^2.0.4",
+    "webpack-merge": "^4.1.1",
+    "xo": "^0.18.2"
+  },
+  "xo": {
+    "space": true,
+    "rules": {
+      "object-curly-spacing": [
+        "error",
+        "always"
+      ]
+    }
+  },
+  "prettier": {
+    "singleQuote": true
+  },
+  "scripts": {
+    "build": "npm-run-all --parallel build:main build:renderer",
+    "build:main": "NODE_ENV=production webpack --config webpack.config.main.js",
+    "build:renderer": "NODE_ENV=production webpack --config webpack.config.renderer.js",
+    "dev": "npm-run-all --parallel dev:main dev:renderer dev:watch",
+    "dev:watch": "NODE_ENV=development node util/watcher.js",
+    "dev:main": "webpack --config webpack.config.main.js",
+    "dev:renderer": "webpack --config webpack.config.renderer.js",
+    "check:config": "npm-run-all --sequential lint:config format:config",
+    "lint:config": "xo --fix webpack.config* util/*.js || true",
+    "format:config": "prettier --write webpack.config* util/*.js",
+    "check": "npm-run-all --sequential lint format",
+    "lint": "xo --fix src/*.js src/lib/*.js || true",
+    "format": "prettier --write src/*.js src/lib/*.js"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome": "^1.1.3",
+    "@fortawesome/fontawesome-free-regular": "^5.0.6",
+    "@fortawesome/fontawesome-free-solid": "^5.0.6",
+    "@fortawesome/react-fontawesome": "^0.0.17",
+    "axios": "^0.17.1",
+    "date-fns": "^2.0.0-alpha.7",
+    "electron": "^2.0.0-beta.1",
+    "electron-store": "^1.3.0",
+    "oauth": "^0.9.15",
+    "office-ui-fabric-react": "^5.54.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "twitter-text": "^2.0.4"
+  }
+}
