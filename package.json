@@ -38,7 +38,9 @@
     "singleQuote": true
   },
   "scripts": {
-    "build": "npm-run-all --parallel build:main build:renderer",
+    "build:package:mac": "electron-packager . WhaleTongue --platform=darwin --arch=x64 --asar --ignore='src/|util/|MEMO.md|.*\\.7z|statuses.\\.json'",
+    "build:package:win": "electron-packager . WhaleTongue --platform=win32 --arch=x64 --asar --ignore='src/|util/|MEMO.md|.*\\.7z|statuses.\\.json'",
+    "build:script": "npm-run-all --parallel build:main build:renderer",
     "build:main": "NODE_ENV=production webpack --config webpack.config.main.js",
     "build:renderer": "NODE_ENV=production webpack --config webpack.config.renderer.js",
     "dev": "npm-run-all --parallel dev:main dev:renderer dev:watch",

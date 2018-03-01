@@ -21,6 +21,7 @@ export default class Twitter extends EventEmitter {
   connect() {
     clearTimeout(this.refreshTimer);
     this.refreshTimer = setTimeout(() => {
+      this.emit('notice', { text: 'Refreshing connection', notice: true });
       this.reconnectCount = 0;
       this.stream.abort();
       this.connect();
@@ -43,6 +44,8 @@ export default class Twitter extends EventEmitter {
       response.on('data', data => {
         clearTimeout(this.stallTimer);
         this.stallTimer = setTimeout(() => {
+          this.emit('notice', { text: 'Reconnecting stream', notice: true });
+          this.reconnectCount++;
           this.connect();
         }, 60000);
 
@@ -94,6 +97,10 @@ export default class Twitter extends EventEmitter {
     );
   }
   processStatus(status) {
+    if (status.event) {
+      console.log(status);
+    }
+
     const collectUrlEntity = entities => {
       let urlEntities = [];
       if (entities.media) {
@@ -115,14 +122,22 @@ export default class Twitter extends EventEmitter {
 
     if (status.extended_tweet) {
       status.text = status.extended_tweet.full_text;
+      status.entities = status.extended_tweet.entities;
     } else if (status.full_text) {
+      if (status.extended_entities) {
+        status.entities.media = status.extended_entities.media;
+      }
       status.text = status.full_text;
     }
 
-    if (status.retweeted_status) { 
+    if (status.retweeted_status) {
       if(status.retweeted_status.extended_tweet) {
         status.retweeted_status.text = status.retweeted_status.extended_tweet.full_text;
+        status.retweeted_status.entities = status.retweeted_status.extended_tweet.entities;
       } else if (status.retweeted_status.full_text){
+        if (status.retweeted_status.extended_entities) {
+          status.retweeted_status.entities.media = status.retweeted_status.extended_entities.media;
+        }
         status.retweeted_status.text = status.retweeted_status.full_text;
       }
       status.retweeted_status.html_text = linkify(status.retweeted_status.text, status.retweeted_status.entities);
@@ -131,7 +146,11 @@ export default class Twitter extends EventEmitter {
     if (status.quoted_status) {
       if (status.quoted_status.extended_tweet) {
         status.quoted_status.text = status.quoted_status.extended_tweet.full_text;
+        status.quoted_status.entities = status.quoted_status.extended_tweet.full_text;
       } else if (status.quoted_status.full_text) {
+        if (status.quoted_status.extended_entities) {
+          status.quoted_status.entities.media = status.quoted_status.extended_entities.media;
+        }
         status.quoted_status.text = status.quoted_status.full_text;
       }
       status.quoted_status.html_text = linkify(status.quoted_status.text, status.quoted_status.entities);
@@ -143,6 +162,7 @@ export default class Twitter extends EventEmitter {
     let tweet;
     if (status.retweeted_status) {
       tweet = {
+        protected: status.retweeted_status.user.protected,
         timestamp: status.retweeted_status.created_at,
         id: status.retweeted_status.id_str,
         profile_image: status.retweeted_status.user.profile_image_url_https,
@@ -151,11 +171,11 @@ export default class Twitter extends EventEmitter {
         text: status.retweeted_status.text,
         html_text: status.retweeted_status.html_text,
         entities: status.retweeted_status.entities,
-        extended_entities: status.retweeted_status.extended_entities,
         retweeter: { name: status.user.name, screen_name: status.user.screen_name },
       };
     } else {
       tweet = {
+        protected: status.user.protected,
         timestamp: status.created_at,
         id: status.id_str,
         profile_image: status.user.profile_image_url_https,
@@ -164,7 +184,6 @@ export default class Twitter extends EventEmitter {
         text: status.text,
         html_text: status.html_text,
         entities: status.entities,
-        extended_entities: status.extended_entities,
       };
     }
     if (status.quoted_status) {

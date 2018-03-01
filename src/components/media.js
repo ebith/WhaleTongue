@@ -1,21 +1,35 @@
 import React from 'react';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import faPlayCircle from '@fortawesome/fontawesome-free-regular/faPlayCircle';
+import { OgpThumbnail } from './ogp-thumbnail.js';
 
 export const Media = ({ entities }) => {
-  if (!entities.media) {
-    return null;
-  }
+  const twimg = entities.media ? true : false;
+  const urls = entities.urls ?
+    entities.urls.length > 0 ? true : false :
+    false;
+  return (
+    <div>
+      {twimg && <TwitterMedia entities={entities}/> }
+      {!twimg && urls && <ExternalMedia entities={entities}/> }
+      {!twimg && urls && <OgpThumbnail entities={entities} /> }
+    </div>
+  );
+}
+
+export const TwitterMedia = ({ entities }) => {
   const media = entities.media.map(entity => {
     let linkUrl, type;
     switch (entity.type) {
       case 'animated_gif':
       case 'video':
         entity.video_info.variants.sort((a,b) =>{
-          return a.bitrate - b.bitrate;
+          if (!a.bitrate) { return 1; }
+          if (!b.bitrate) { return -1; }
+          return b.bitrate - a.bitrate;
         });
         type = 'media-video';
-        linkUrl = entity.video_info.variants[entity.video_info.variants.length - 1].url;
+        linkUrl = entity.video_info.variants[0].url;
         break;
       case 'photo':
         type = 'media-photo';
@@ -38,9 +52,6 @@ export const Media = ({ entities }) => {
 };
 
 export const ExternalMedia = ({ entities }) => {
-  if (!entities.urls) {
-    return null;
-  }
   const media = entities.urls.map((entity, index) => {
     if (/\.(jpg|png|gif)$/.test(entity.expanded_url)) {
       return (

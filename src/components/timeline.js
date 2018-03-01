@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {format, parse} from 'date-fns/esm';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import faRetweet from '@fortawesome/fontawesome-free-solid/faRetweet';
+import faLock from '@fortawesome/fontawesome-free-solid/faLock';
 
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { Image, ImageFit } from 'office-ui-fabric-react/lib/Image';
@@ -9,8 +10,7 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { List } from 'office-ui-fabric-react/lib/List';
 
 import Twitter from '../lib/twitter';
-import { Media, ExternalMedia } from './media.js';
-import { OgpThubnail } from './ogp-thumbnail.js';
+import { Media } from './media.js';
 
 export class Timeline extends Component {
   constructor(props) {
@@ -19,6 +19,10 @@ export class Timeline extends Component {
       tweets: []
     };
     const t = new Twitter(props.config);
+    t.on('notice', msg => {
+      let tweets = [msg].concat(this.state.tweets);
+      this.setState({tweets});
+    });
     t.on('tweet', tweet => {
       let tweets = [tweet].concat(this.state.tweets);
       if (tweets.length > 1000) { tweets.pop(); }
@@ -34,7 +38,7 @@ export class Timeline extends Component {
       console.log(timeline);
     });
     // this.state = { tweets:
-    //   require('../statuses2.json').map(status => {
+    //   require('../../statuses2.json').map(status => {
     //     return t.processStatus(status);
     //   })
     // };
@@ -48,16 +52,29 @@ export class Timeline extends Component {
     );
   }
   _onRenderCell(tweet) {
-    return (
-      <div className='tweet-itemCell' data-is-focusable={ true }>
-        <ProfileImage profile_image={tweet.profile_image} screen_name={tweet.screen_name} />
-        <div className='tweet-itemContent'>
-          <Name screen_name={tweet.screen_name} name={tweet.name} />
-          <Extra retweeter={tweet.retweeter} id={tweet.id} timestamp={tweet.timestamp}/>
-          <Text tweet={tweet} />
+    if (tweet.notice) {
+      return (
+        <div className='tweet-itemCell' data-is-focusable={ true }>
+          <ProfileImage profile_image='https://pbs.twimg.com/profile_images/875087697177567232/Qfy0kRIP_normal.jpg' screen_name='Notice' />
+          <div className='tweet-itemContent'>
+            <Name screen_name={tweet.screen_name} name={tweet.name} />
+            <Extra retweeter={tweet.retweeter} id={tweet.id} timestamp={tweet.timestamp} locked={tweet.protected}/>
+            <Text tweet={tweet} />
+          </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div className='tweet-itemCell' data-is-focusable={ true }>
+          <ProfileImage profile_image={tweet.profile_image} screen_name={tweet.screen_name} />
+          <div className='tweet-itemContent'>
+            <Name screen_name={tweet.screen_name} name={tweet.name} />
+            <Extra retweeter={tweet.retweeter} id={tweet.id} timestamp={tweet.timestamp} locked={tweet.protected}/>
+            <Text tweet={tweet} />
+          </div>
+        </div>
+      );
+    }
   }
 }
 
@@ -76,26 +93,20 @@ export const Name = ({ name, screen_name }) => (
   </a>
 );
 
-export const Extra = ({ retweeter, id, timestamp }) => {
-  let elem;
+export const Extra = ({ retweeter, id, timestamp, locked }) => {
+  let text, className;
   if (retweeter) {
-    elem = (
-      <span>
-        <FontAwesomeIcon icon={faRetweet} />
-        <span className='retweeter'>{retweeter.name}</span>
-      </span>
-    );
+    text = retweeter.name;
+    className = 'retweeter';
   } else {
-    elem = (
-      <span>
-        <span>{format(new Date(timestamp), 'HH:mm')}</span>
-      </span>
-    )
+    text = format(new Date(timestamp), 'HH:mm');
   }
   return (
     <span className="tweet-extra">
+      {retweeter && <FontAwesomeIcon icon={faRetweet} />}
+      {locked && <FontAwesomeIcon icon={faLock} />}
       <a href={`https://twitter.com/statuses/${id}`}>
-      {elem}
+        <span className={className}>{text}</span>
       </a>
     </span>
   );
@@ -113,10 +124,12 @@ export class Text extends Component {
   }
 
   render() {
-    const { text, html_text, quoted, extended_entities, entities } = this.props.tweet;
+    const { text, html_text, quoted, entities } = this.props.tweet;
 
     const canvas = document.querySelector('canvas');
-    const width = canvas.getContext('2d').measureText(quoted ? text + quoted.text : text).width;
+    const context = canvas.getContext('2d');
+    context.font = '"Yu Gothic", YuGothic';
+    const width = context.measureText(quoted ? text + quoted.text : text).width;
     let widthClass;
     if (width < 80) {
       widthClass = 'fuckingShort';
@@ -135,9 +148,7 @@ export class Text extends Component {
     return (
       <div className='tweet-content'>
         <span className={`tweet-text ${widthClass} ${width}`} dangerouslySetInnerHTML={this.html(html_text, quoted)} />
-        {extended_entities && <Media entities={extended_entities} />}
-        {!extended_entities && <ExternalMedia entities={entities} />}
-        {!extended_entities && <OgpThubnail entities={entities} />}
+        {<Media entities={entities} />}
       </div>
     );
   }
