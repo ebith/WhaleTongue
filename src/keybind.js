@@ -1,8 +1,10 @@
 export default class KeyBind {
   constructor() {
     let lastEvent;
-    document.addEventListener('keydown', (event) => {
+    document.addEventListener('keydown', event => {
       switch (event.key) {
+        case 'i':
+          this.openInput(event);
         case 'j':
           this.prevTweet(event);
           break;
@@ -21,6 +23,9 @@ export default class KeyBind {
       lastEvent = event;
     });
   }
+  openInput(event) {
+    event.preventDefault();
+  }
   prevTweet(event) {
     event.preventDefault();
   }
@@ -29,10 +34,10 @@ export default class KeyBind {
   }
   scrollToTop(event) {
     event.preventDefault();
-    document.querySelector('#root').scrollIntoView({behavior: 'smooth', block: 'start'});
+    document.querySelector('#root').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
   scrollToBottom(event) {
     event.preventDefault();
-    document.querySelector('#root').scrollIntoView({behavior: 'smooth', block: 'end'});
+    document.querySelector('#root').scrollIntoView({ behavior: 'smooth', block: 'end' });
   }
 }

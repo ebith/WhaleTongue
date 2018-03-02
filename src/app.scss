@@ -1,8 +1,8 @@
-@import "~office-ui-fabric-react/dist/sass/_References.scss";
+@import '~office-ui-fabric-react/dist/sass/_References.scss';
 
 // Do not download web font on MacOS
 .css-32 {
-  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Segoe UI', 'Yu Gothic Medium', sans-serif !important;
+  font-family: BlinkMacSystemFont, 'Yu Gothic Medium', sans-serif !important;
 }
 
 .tweet-itemCell {
@@ -12,7 +12,7 @@
 }
 
 .tweet-itemCell:hover {
-  background: #EEE;
+  background: #eee;
 }
 
 .tweet-itemContent {
@@ -82,7 +82,6 @@
       color: $ms-color-neutralLighter;
     }
   }
-
 }
 
 .external-media {
@@ -111,4 +110,9 @@
     text-decoration-line: none;
     color: $ms-color-neutralSecondary;
   }
+}
+
+.tweet-block, .tweet-unblock, .tweet-favorite, .tweet-unfavorite, .tweet-follow, .tweet-unfollow, .tweet-list_member_added, .tweet-list_member_removed {
+  border-radius: 4px;
+  background-color: $ms-color-themeLight;
 }

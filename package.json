@@ -35,9 +35,12 @@
     }
   },
   "prettier": {
-    "singleQuote": true
+    "singleQuote": true,
+    "printWidth": 120
   },
   "scripts": {
+    "compress:win": "7z u -r WhaleTongue-$(date --iso-8601)-Windows.7z $(pwd)/WhaleTongue-win32-x64",
+    "compress:mac": "7z u -r WhaleTongue-$(date --iso-8601)-MacOS.7z $(pwd)/WhaleTongue-darwin-x64/WhaleTongue.app",
     "build:package:mac": "electron-packager . WhaleTongue --platform=darwin --arch=x64 --asar --ignore='src/|util/|MEMO.md|.*\\.7z|statuses.\\.json'",
     "build:package:win": "electron-packager . WhaleTongue --platform=win32 --arch=x64 --asar --ignore='src/|util/|MEMO.md|.*\\.7z|statuses.\\.json'",
     "build:script": "npm-run-all --parallel build:main build:renderer",

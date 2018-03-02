@@ -6,16 +6,18 @@ import Store from 'electron-store';
 import Auth from './auth';
 
 let win;
-const store = new Store({ defaults: {
-  keys: {
-    consumer: 'MCwckohMuzkDTOc2gT0t0WgNM',
-    consumerSecret: 'gKnudp6Xo0FTPhnspM0J9w6oo6FOqA88jdSFp0bdEQxLCrWr8v'
-  },
-  bounds: {
-    width: 600,
-    height: 800
+const store = new Store({
+  defaults: {
+    keys: {
+      consumer: 'MCwckohMuzkDTOc2gT0t0WgNM',
+      consumerSecret: 'gKnudp6Xo0FTPhnspM0J9w6oo6FOqA88jdSFp0bdEQxLCrWr8v'
+    },
+    bounds: {
+      width: 600,
+      height: 800
+    }
   }
-} });
+});
 
 const createWindow = () => {
   const { width, height, x, y } = store.get('bounds');
@@ -31,32 +33,35 @@ const createWindow = () => {
   }
 
   win.webContents.on('new-window', (event, url) => {
-    event.preventDefault()
+    event.preventDefault();
     if (!/\.(jpg|png|gif|mp4)$/.test(url)) {
       shell.openExternal(url);
     } else {
-      const popup = new BrowserWindow({show: false});
+      const popup = new BrowserWindow({ show: false });
       popup.once('ready-to-show', () => {
         popup.webContents.executeJavaScript(`
           const style = document.createElement('style');
           document.body.appendChild(style);
           document.styleSheets[0].insertRule('body { background-color: #f0f2f5 !important; }', 0);
         `);
-        popup.show()
+        popup.show();
       });
       popup.webContents.on('cursor-changed', (event, type) => {
         if (type === 'zoom-out') {
-          popup.webContents.executeJavaScript(`
+          popup.webContents.executeJavaScript(
+            `
             JSON.stringify(
               document.body.firstChild.naturalWidth ?
               { width: document.body.firstChild.naturalWidth, height: document.body.firstChild.naturalHeight } :
               { width: document.body.firstChild.videoWidth, height: document.body.firstChild.videoHeight }
             );
-          `, value => {
-            const size = JSON.parse(value);
-            popup.setSize(size.width + 50, size.height + 50);
-            popup.center();
-          });
+          `,
+            value => {
+              const size = JSON.parse(value);
+              popup.setSize(size.width + 50, size.height + 50);
+              popup.center();
+            }
+          );
         }
       });
       popup.loadURL(url);
@@ -99,4 +104,3 @@ app.on('window-all-closed', () => {
     app.quit();
   }
 });
-

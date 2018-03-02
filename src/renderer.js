@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { render } from 'react-dom';
 import Store from 'electron-store';
 import { Fabric } from 'office-ui-fabric-react/lib/Fabric';
-import { Timeline } from './components/timeline.js';
-import KeyBind from './keybind'
-import './app.scss'
+import { Timeline } from './components/timeline';
+import KeyBind from './keybind';
+import './app.scss';
 
 class App extends Component {
   render() {
@@ -25,6 +25,6 @@ const config = {
   consumerSecret: store.get('keys.consumerSecret'),
   accessToken: store.get('tokens.access'),
   accessTokenSecret: store.get('tokens.accessSecret')
-}
+};
 
 render(<App config={config} />, document.getElementById('root'));

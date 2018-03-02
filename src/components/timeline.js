@@ -54,18 +54,20 @@ export class Timeline extends Component {
   _onRenderCell(tweet) {
     if (tweet.notice) {
       return (
-        <div className='tweet-itemCell' data-is-focusable={ true }>
-          <ProfileImage profile_image='https://pbs.twimg.com/profile_images/875087697177567232/Qfy0kRIP_normal.jpg' screen_name='Notice' />
+        <div className='tweet-itemCell'>
+          <Image src='https://pbs.twimg.com/profile_images/875087697177567232/Qfy0kRIP_normal.jpg' width={ 48 } height={ 48 } imageFit={ ImageFit.cover }/>
           <div className='tweet-itemContent'>
-            <Name screen_name={tweet.screen_name} name={tweet.name} />
-            <Extra retweeter={tweet.retweeter} id={tweet.id} timestamp={tweet.timestamp} locked={tweet.protected}/>
-            <Text tweet={tweet} />
+            <span className="tweet-name">Notice</span>
+            <Extra timestamp={tweet.timestamp} />
+            <div className='tweet-content'>
+              <span className={`tweet-text middle`}>{ tweet.text }</span>
+            </div>
           </div>
         </div>
       );
     } else {
       return (
-        <div className='tweet-itemCell' data-is-focusable={ true }>
+        <div className={`tweet-itemCell tweet-${tweet.event}`}>
           <ProfileImage profile_image={tweet.profile_image} screen_name={tweet.screen_name} />
           <div className='tweet-itemContent'>
             <Name screen_name={tweet.screen_name} name={tweet.name} />
@@ -147,8 +149,8 @@ export class Text extends Component {
 
     return (
       <div className='tweet-content'>
-        <span className={`tweet-text ${widthClass} ${width}`} dangerouslySetInnerHTML={this.html(html_text, quoted)} />
-        {<Media entities={entities} />}
+        <span className={`tweet-text ${widthClass}`} dangerouslySetInnerHTML={this.html(html_text, quoted)} />
+        {entities && <Media entities={entities} />}
       </div>
     );
   }
