@@ -172,6 +172,7 @@ export default class Twitter extends EventEmitter {
     }
 
     if (status.retweeted_status) {
+      console.log(status.retweeted_status);
       if (status.retweeted_status.extended_tweet) {
         status.retweeted_status.text = status.retweeted_status.extended_tweet.full_text;
         status.retweeted_status.entities = status.retweeted_status.extended_tweet.entities;

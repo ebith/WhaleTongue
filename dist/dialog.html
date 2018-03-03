@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <style>
+      input {
+        height: 20px;
+        width: 100px;
+      }
+      button { height: 2rem; width: 2rem; }
+    </style>
+  </head>
+  <body>
+    <form method="dialog">
+      <input placeholder="PIN" id="pin">
+      <button type="submit" id="submit">OK</button>
+    </form>
+    <script>
+      const { ipcRenderer } = require('electron');
+      document.querySelector('#submit').addEventListener('click', () => {
+        ipcRenderer.send('PIN', document.querySelector('#pin').value);
+      });
+    </script>
+  </body>
+</html>

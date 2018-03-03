@@ -67,11 +67,11 @@ export class Timeline extends Component {
       );
     } else {
       return (
-        <div className={`tweet-itemCell tweet-${tweet.event}`}>
+        <div className='tweet-itemCell'>
           <ProfileImage profile_image={tweet.profile_image} screen_name={tweet.screen_name} />
           <div className='tweet-itemContent'>
             <Name screen_name={tweet.screen_name} name={tweet.name} />
-            <Extra retweeter={tweet.retweeter} id={tweet.id} timestamp={tweet.timestamp} locked={tweet.protected}/>
+            <Extra retweeter={tweet.retweeter} id={tweet.id} timestamp={tweet.timestamp} locked={tweet.protected} event={tweet.event}/>
             <Text tweet={tweet} />
           </div>
         </div>
@@ -95,21 +95,27 @@ export const Name = ({ name, screen_name }) => (
   </a>
 );
 
-export const Extra = ({ retweeter, id, timestamp, locked }) => {
-  let text, className;
+export const Extra = ({ retweeter, id, timestamp, locked, event}) => {
+  let text, className, elem;
   if (retweeter) {
     text = retweeter.name;
     className = 'retweeter';
   } else {
     text = format(new Date(timestamp), 'HH:mm');
   }
+  if (event) {
+    elem = <span className={`tweet-event ${event}`}>{event}</span>
+  } else {
+    elem =
+    <a href={`https://twitter.com/statuses/${id}`}>
+      <span className={className}>{text}</span>
+    </a>
+  }
   return (
     <span className="tweet-extra">
       {retweeter && <FontAwesomeIcon icon={faRetweet} />}
       {locked && <FontAwesomeIcon icon={faLock} />}
-      <a href={`https://twitter.com/statuses/${id}`}>
-        <span className={className}>{text}</span>
-      </a>
+      {elem}
     </span>
   );
 }

@@ -16,19 +16,19 @@
 }
 
 .tweet-itemContent {
-  margin-left: 10px;
+  margin-left: 2px;
   overflow: hidden;
   flex-grow: 1;
 }
 
 .tweet-name {
   text-decoration-line: none;
-  color: $ms-color-neutralPrimary;
+  color: $ms-color-neutralDark;
 }
 
 .tweet-screen_name {
   text-decoration-line: none;
-  color: $ms-color-neutralSecondary;
+  color: $ms-color-neutralPrimary;
   margin: 0 0 0 2px;
   font-size: $ms-font-size-s-plus;
 }
@@ -92,7 +92,7 @@
 }
 
 .tweet-text {
-  color: $ms-color-neutralDark;
+  color: $ms-color-black;
   word-break: break-all;
 }
 
@@ -108,11 +108,14 @@
   float: right;
   a {
     text-decoration-line: none;
-    color: $ms-color-neutralSecondary;
+    color: $ms-color-neutralPrimary;
   }
 }
 
-.tweet-block, .tweet-unblock, .tweet-favorite, .tweet-unfavorite, .tweet-follow, .tweet-unfollow, .tweet-list_member_added, .tweet-list_member_removed {
-  border-radius: 4px;
-  background-color: $ms-color-themeLight;
+.tweet-event {
+  color: $ms-color-magenta;
+}
+
+body {
+  margin: 0 4px;
 }

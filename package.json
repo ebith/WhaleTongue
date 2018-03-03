@@ -39,6 +39,7 @@
     "printWidth": 120
   },
   "scripts": {
+    "clean": "rm -rf WhaleTongue-*.7z && rm -rf WhaleTongue-*-x64",
     "compress:win": "7z u -r WhaleTongue-$(date --iso-8601)-Windows.7z $(pwd)/WhaleTongue-win32-x64",
     "compress:mac": "7z u -r WhaleTongue-$(date --iso-8601)-MacOS.7z $(pwd)/WhaleTongue-darwin-x64/WhaleTongue.app",
     "build:package:mac": "electron-packager . WhaleTongue --platform=darwin --arch=x64 --asar --ignore='src/|util/|MEMO.md|.*\\.7z|statuses.\\.json'",

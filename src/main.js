@@ -13,7 +13,7 @@ const store = new Store({
       consumerSecret: 'gKnudp6Xo0FTPhnspM0J9w6oo6FOqA88jdSFp0bdEQxLCrWr8v'
     },
     bounds: {
-      width: 600,
+      width: 400,
       height: 800
     }
   }

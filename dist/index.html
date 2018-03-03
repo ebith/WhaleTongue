@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <base target="_blank">
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src *;"> -->
+  </head>
+  <body>
+    <div id="root"></div>
+    <canvas id="measureText"></canvas>
+    <script>
+      if (process.env.NODE_ENV !== 'production') {
+        require('electron-connect').client.create();
+      }
+    </script>
+    <script src="bundle.js"></script>
+  </body>
+</html>
