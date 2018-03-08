@@ -57,8 +57,10 @@ export class Timeline extends Component {
         <div className='tweet-itemCell'>
           <Image src='https://pbs.twimg.com/profile_images/875087697177567232/Qfy0kRIP_normal.jpg' width={ 48 } height={ 48 } imageFit={ ImageFit.cover }/>
           <div className='tweet-itemContent'>
-            <span className="tweet-name">Notice</span>
-            <Extra timestamp={tweet.timestamp} />
+            <div className="flex-box">
+              <span className="tweet-name">Notice</span>
+              <Extra timestamp={tweet.timestamp} />
+            </div>
             <div className='tweet-content'>
               <span className={`tweet-text middle`}>{ tweet.text }</span>
             </div>
@@ -70,8 +72,10 @@ export class Timeline extends Component {
         <div className='tweet-itemCell'>
           <ProfileImage profile_image={tweet.profile_image} screen_name={tweet.screen_name} />
           <div className='tweet-itemContent'>
-            <Name screen_name={tweet.screen_name} name={tweet.name} />
-            <Extra retweeter={tweet.retweeter} id={tweet.id} timestamp={tweet.timestamp} locked={tweet.protected} event={tweet.event}/>
+            <div className="flex-box">
+              <Name screen_name={tweet.screen_name} name={tweet.name} />
+              <Extra retweeter={tweet.retweeter} id={tweet.id} timestamp={tweet.timestamp} locked={tweet.protected} event={tweet.event}/>
+            </div>
             <Text tweet={tweet} />
           </div>
         </div>

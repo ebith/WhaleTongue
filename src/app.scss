@@ -105,7 +105,6 @@
 
 .tweet-extra {
   margin-bottom: -3px;
-  float: right;
   a {
     text-decoration-line: none;
     color: $ms-color-neutralPrimary;
@@ -118,4 +117,21 @@
 
 body {
   margin: 0 4px;
+}
+
+.flex-box {
+  white-space: nowrap;
+  display: flex;
+  .tweet-name {
+    max-width: 70%;
+    flex: auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .tweet-extra {
+    text-overflow: ellipsis;
+    text-align: right;
+    flex: auto;
+    overflow: hidden;
+  }
 }
