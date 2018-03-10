@@ -6,6 +6,9 @@ import Store from 'electron-store';
 import Auth from './auth';
 
 let win;
+
+app.commandLine.appendSwitch('enable-smooth-scrolling');
+
 const store = new Store({
   defaults: {
     keys: {

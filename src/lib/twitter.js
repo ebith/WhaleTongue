@@ -21,7 +21,7 @@ export default class Twitter extends EventEmitter {
   connect() {
     clearTimeout(this.refreshTimer);
     this.refreshTimer = setTimeout(() => {
-      this.emit('notice', { text: 'Refreshing connection', notice: true });
+      this.emit('notice', { text: 'Refreshing connection', notice: true, timestamp: Date.now() });
       this.reconnectCount = 0;
       this.stream.abort();
       this.connect();
@@ -44,7 +44,7 @@ export default class Twitter extends EventEmitter {
       response.on('data', data => {
         clearTimeout(this.stallTimer);
         this.stallTimer = setTimeout(() => {
-          this.emit('notice', { text: 'Reconnecting stream', notice: true });
+          this.emit('notice', { text: 'Reconnecting stream', notice: true, timestamp: Date.now() });
           this.reconnectCount++;
           this.connect();
         }, 60000);
@@ -73,6 +73,11 @@ export default class Twitter extends EventEmitter {
       });
     });
   }
+  updateStatus(text, callback) {
+    this.oauth.post('https://api.twitter.com/1.1/statuses/update.json', this.accessToken, this.accessTokenSecret, { status: text }, (err, data, res) => {
+      if (callback) { callback(); }
+    });
+  }
   getLastStatus(screen_name, callback) {
     this.oauth.get(
       `https://api.twitter.com/1.1/users/show.json?screen_name=${screen_name}`,
@@ -84,6 +89,7 @@ export default class Twitter extends EventEmitter {
     );
   }
   getTimeline(callback) {
+
     this.oauth.get(
       'https://api.twitter.com/1.1/statuses/home_timeline.json?count=200&exclude_replies=false&tweet_mode=extended',
       this.accessToken,
@@ -140,6 +146,7 @@ export default class Twitter extends EventEmitter {
           break;
       }
       tweet.html_text = autoLink(tweet.text, { usernameIncludeSymbol: true });
+      console.log(tweet);
       return tweet;
     }
 
@@ -172,7 +179,6 @@ export default class Twitter extends EventEmitter {
     }
 
     if (status.retweeted_status) {
-      console.log(status.retweeted_status);
       if (status.retweeted_status.extended_tweet) {
         status.retweeted_status.text = status.retweeted_status.extended_tweet.full_text;
         status.retweeted_status.entities = status.retweeted_status.extended_tweet.entities;

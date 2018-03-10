@@ -4,49 +4,17 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import faRetweet from '@fortawesome/fontawesome-free-solid/faRetweet';
 import faLock from '@fortawesome/fontawesome-free-solid/faLock';
 
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { Image, ImageFit } from 'office-ui-fabric-react/lib/Image';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { List } from 'office-ui-fabric-react/lib/List';
 
-import Twitter from '../lib/twitter';
 import { Media } from './media.js';
 
 export class Timeline extends Component {
-  constructor(props) {
-    super();
-    this.state = {
-      tweets: []
-    };
-    const t = new Twitter(props.config);
-    t.on('notice', msg => {
-      let tweets = [msg].concat(this.state.tweets);
-      this.setState({tweets});
-    });
-    t.on('tweet', tweet => {
-      let tweets = [tweet].concat(this.state.tweets);
-      if (tweets.length > 1000) { tweets.pop(); }
-      this.setState({ tweets });
-    });
-    t.connect();
-
-    // t.getLastStatus(config.screen_name, user => {
-    //   console.log(user.status.text);
-    // });
-    t.getTimeline((timeline) => {
-      this.setState({tweets: timeline});
-      console.log(timeline);
-    });
-    // this.state = { tweets:
-    //   require('../../statuses2.json').map(status => {
-    //     return t.processStatus(status);
-    //   })
-    // };
-  }
   render() {
     return (
       <List
-        items={ this.state.tweets }
+        items={ this.props.tweets }
         onRenderCell={ this._onRenderCell }
       />
     );
@@ -55,7 +23,7 @@ export class Timeline extends Component {
     if (tweet.notice) {
       return (
         <div className='tweet-itemCell'>
-          <Image src='https://pbs.twimg.com/profile_images/875087697177567232/Qfy0kRIP_normal.jpg' width={ 48 } height={ 48 } imageFit={ ImageFit.cover }/>
+          <Image className='tweet-profile-image' src='https://pbs.twimg.com/profile_images/875087697177567232/Qfy0kRIP_normal.jpg' width={ 48 } height={ 48 } imageFit={ ImageFit.cover }/>
           <div className='tweet-itemContent'>
             <div className="flex-box">
               <span className="tweet-name">Notice</span>

@@ -1,10 +1,14 @@
+import { TweetModal } from './components/tweet-modal';
+
 export default class KeyBind {
-  constructor() {
+  constructor(config, emitter) {
     let lastEvent;
     document.addEventListener('keydown', event => {
       switch (event.key) {
         case 'i':
-          this.openInput(event);
+          event.preventDefault();
+          emitter('openTweetModal');
+          break;
         case 'j':
           this.prevTweet(event);
           break;
@@ -12,7 +16,7 @@ export default class KeyBind {
           this.nextTweet(event);
           break;
         case 'g':
-          if (event.timeStamp < lastEvent.timeStamp + 500) {
+          if (event.timeStamp < lastEvent.timeStamp + 500 && lastEvent.key === 'g') {
             this.scrollToTop(event);
           }
           break;
@@ -22,9 +26,6 @@ export default class KeyBind {
       }
       lastEvent = event;
     });
-  }
-  openInput(event) {
-    event.preventDefault();
   }
   prevTweet(event) {
     event.preventDefault();
