@@ -23,7 +23,9 @@ export class Timeline extends Component {
     if (tweet.notice) {
       return (
         <div className='tweet-itemCell'>
-          <Image className='tweet-profile-image' src='https://pbs.twimg.com/profile_images/875087697177567232/Qfy0kRIP_normal.jpg' width={ 48 } height={ 48 } imageFit={ ImageFit.cover }/>
+          <div className='tweet-profile-image'>
+            <Image src='https://pbs.twimg.com/profile_images/875087697177567232/Qfy0kRIP_normal.jpg' width={ 48 } height={ 48 } imageFit={ ImageFit.cover }/>
+          </div>
           <div className='tweet-itemContent'>
             <div className="flex-box">
               <span className="tweet-name">Notice</span>

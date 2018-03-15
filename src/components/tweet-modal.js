@@ -14,7 +14,10 @@ export const TweetModal = ({isOpen, onClose, onUpdateStatus}) => {
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter' && event.ctrlKey) {
-      onUpdateStatus(event.target.value, () => { onClose(); });
+      onUpdateStatus(event.target.value, () => {
+        onClose();
+        event.target.value = '';
+      });
     } else if (event.key === 'Escape') {
       onClose();
     }
@@ -22,7 +25,7 @@ export const TweetModal = ({isOpen, onClose, onUpdateStatus}) => {
 
   return (
     <Modal isOpen={isOpen} onDissmiss={onClose} containerClassName="tweet-modal">
-      <TextField label="What's happening?" multiline rows={ 4 } onGetErrorMessage={ check } validateOnLoad={ false }  onKeyDown={handleKeyDown} value="" />
+      <TextField label="What's happening?" multiline rows={ 4 } onGetErrorMessage={ check } validateOnLoad={ false }  onKeyDown={handleKeyDown} />
     </Modal>
   );
 }

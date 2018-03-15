@@ -41,7 +41,6 @@ class App extends Component {
     // });
     this.t.getTimeline((timeline) => {
       this.setState({tweets: timeline});
-      console.log(timeline);
     });
     // this.state = { tweets:
     //   require('../../statuses2.json').map(status => {

@@ -31,6 +31,7 @@ export default class Twitter extends EventEmitter {
     }
     this.stream = this.oauth.get(
       'https://userstream.twitter.com/1.1/user.json?replies=all',
+      // 'https://stream.twitter.com/1.1/statuses/sample.json',
       this.accessToken,
       this.accessTokenSecret
     );
@@ -146,7 +147,6 @@ export default class Twitter extends EventEmitter {
           break;
       }
       tweet.html_text = autoLink(tweet.text, { usernameIncludeSymbol: true });
-      console.log(tweet);
       return tweet;
     }
 
@@ -171,11 +171,10 @@ export default class Twitter extends EventEmitter {
     if (status.extended_tweet) {
       status.text = status.extended_tweet.full_text;
       status.entities = status.extended_tweet.entities;
-    } else if (status.full_text) {
-      if (status.extended_entities) {
-        status.entities.media = status.extended_entities.media;
-      }
+    } else if (status.full_text) { // REST API: tweet_mode=extended
       status.text = status.full_text;
+    } else if (status.extended_entities) {
+      status.entities.media = status.extended_entities.media;
     }
 
     if (status.retweeted_status) {
@@ -183,10 +182,9 @@ export default class Twitter extends EventEmitter {
         status.retweeted_status.text = status.retweeted_status.extended_tweet.full_text;
         status.retweeted_status.entities = status.retweeted_status.extended_tweet.entities;
       } else if (status.retweeted_status.full_text) {
-        if (status.retweeted_status.extended_entities) {
-          status.retweeted_status.entities.media = status.retweeted_status.extended_entities.media;
-        }
         status.retweeted_status.text = status.retweeted_status.full_text;
+      } else if (status.retweeted_status.extended_entities) {
+        status.retweeted_status.entities.media = status.retweeted_status.extended_entities.media;
       }
       status.retweeted_status.html_text = linkify(status.retweeted_status.text, status.retweeted_status.entities);
     }
@@ -196,10 +194,9 @@ export default class Twitter extends EventEmitter {
         status.quoted_status.text = status.quoted_status.extended_tweet.full_text;
         status.quoted_status.entities = status.quoted_status.extended_tweet.entities;
       } else if (status.quoted_status.full_text) {
-        if (status.quoted_status.extended_entities) {
-          status.quoted_status.entities.media = status.quoted_status.extended_entities.media;
-        }
         status.quoted_status.text = status.quoted_status.full_text;
+      } else if (status.quoted_status.extended_entities) {
+        status.quoted_status.entities.media = status.quoted_status.extended_entities.media;
       }
       status.quoted_status.html_text = linkify(status.quoted_status.text, status.quoted_status.entities);
     }
@@ -244,6 +241,7 @@ export default class Twitter extends EventEmitter {
       };
     }
 
+    console.log(status);
     return tweet;
   }
 }
