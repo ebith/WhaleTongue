@@ -18,8 +18,7 @@ module.exports = merge(base.config, {
           { loader: 'style-loader' },
           {
             loader: 'css-loader',
-            options:
-              process.env.NODE_ENV === 'production' ? { minimize: true } : {}
+            options: process.env.NODE_ENV === 'production' ? { minimize: true } : {}
           },
           { loader: 'sass-loader' }
         ]

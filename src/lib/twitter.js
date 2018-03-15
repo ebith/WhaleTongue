@@ -75,9 +75,17 @@ export default class Twitter extends EventEmitter {
     });
   }
   updateStatus(text, callback) {
-    this.oauth.post('https://api.twitter.com/1.1/statuses/update.json', this.accessToken, this.accessTokenSecret, { status: text }, (err, data, res) => {
-      if (callback) { callback(); }
-    });
+    this.oauth.post(
+      'https://api.twitter.com/1.1/statuses/update.json',
+      this.accessToken,
+      this.accessTokenSecret,
+      { status: text },
+      (err, data, res) => {
+        if (callback) {
+          callback();
+        }
+      }
+    );
   }
   getLastStatus(screen_name, callback) {
     this.oauth.get(
@@ -90,7 +98,6 @@ export default class Twitter extends EventEmitter {
     );
   }
   getTimeline(callback) {
-
     this.oauth.get(
       'https://api.twitter.com/1.1/statuses/home_timeline.json?count=200&exclude_replies=false&tweet_mode=extended',
       this.accessToken,
@@ -110,7 +117,7 @@ export default class Twitter extends EventEmitter {
         id: Date.now(),
         profile_image: status.source.profile_image_url_https,
         name: status.source.name,
-        screen_name: status.source.screen_name,
+        screen_name: status.source.screen_name
       };
       switch (status.event) {
         case 'block':
@@ -171,7 +178,8 @@ export default class Twitter extends EventEmitter {
     if (status.extended_tweet) {
       status.text = status.extended_tweet.full_text;
       status.entities = status.extended_tweet.entities;
-    } else if (status.full_text) { // REST API: tweet_mode=extended
+    } else if (status.full_text) {
+      // REST API: tweet_mode=extended
       status.text = status.full_text;
     } else if (status.extended_entities) {
       status.entities.media = status.extended_entities.media;

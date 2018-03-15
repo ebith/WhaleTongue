@@ -13,36 +13,38 @@ class App extends Component {
     super();
     this.state = {
       tweets: [],
-      showModal: false,
-    }
+      showModal: false
+    };
 
-    this.keybind = new KeyBind(store.get('keyBind'), (event) => {
-      switch(event) {
+    this.keybind = new KeyBind(store.get('keyBind'), event => {
+      switch (event) {
         case 'openTweetModal':
-          this.setState({showModal: true});
+          this.setState({ showModal: true });
           break;
       }
     });
 
     this.t = new Twitter(config);
     this.t.on('notice', msg => {
-      let tweets = [msg].concat(this.state.tweets);
-      this.setState({tweets});
+      const tweets = [msg].concat(this.state.tweets);
+      this.setState({ tweets });
     });
     this.t.on('tweet', tweet => {
-      let tweets = [tweet].concat(this.state.tweets);
-      if (tweets.length > 1000) { tweets.pop(); }
+      const tweets = [tweet].concat(this.state.tweets);
+      if (tweets.length > 1000) {
+        tweets.pop();
+      }
       this.setState({ tweets });
     });
     this.t.connect();
 
-    // t.getLastStatus(config.screen_name, user => {
+    // T.getLastStatus(config.screen_name, user => {
     //   console.log(user.status.text);
     // });
-    this.t.getTimeline((timeline) => {
-      this.setState({tweets: timeline});
+    this.t.getTimeline(timeline => {
+      this.setState({ tweets: timeline });
     });
-    // this.state = { tweets:
+    // This.state = { tweets:
     //   require('../../statuses2.json').map(status => {
     //     return t.processStatus(status);
     //   })
@@ -50,7 +52,7 @@ class App extends Component {
   }
 
   closeModal() {
-    this.setState({showModal: false});
+    this.setState({ showModal: false });
   }
 
   updateStatus(text, callback) {
@@ -60,7 +62,11 @@ class App extends Component {
   render() {
     return (
       <Fabric>
-        <TweetModal isOpen={this.state.showModal} onClose={this.closeModal.bind(this)}  onUpdateStatus={this.updateStatus.bind(this)} />
+        <TweetModal
+          isOpen={this.state.showModal}
+          onClose={this.closeModal.bind(this)}
+          onUpdateStatus={this.updateStatus.bind(this)}
+        />
         <Timeline tweets={this.state.tweets} />
       </Fabric>
     );

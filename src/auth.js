@@ -25,13 +25,18 @@ export default class Auth {
 
       ipcMain.on('PIN', (event, pin) => {
         if (pin.length > 6) {
-          oauth.getOAuthAccessToken(requestToken, requestTokenSecret, pin.trim(), (err, accessToken, accessTokenSecret, results) => {
-            store.set('tokens', { access: accessToken, accessSecret: accessTokenSecret });
-            store.set('user_id', results.user_id);
-            store.set('screen_name', results.screen_name);
-            win.close();
-            callback();
-          });
+          oauth.getOAuthAccessToken(
+            requestToken,
+            requestTokenSecret,
+            pin.trim(),
+            (err, accessToken, accessTokenSecret, results) => {
+              store.set('tokens', { access: accessToken, accessSecret: accessTokenSecret });
+              store.set('user_id', results.user_id);
+              store.set('screen_name', results.screen_name);
+              win.close();
+              callback();
+            }
+          );
         } else {
           // Error
         }
