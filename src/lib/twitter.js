@@ -31,7 +31,6 @@ export default class Twitter extends EventEmitter {
     }
     this.stream = this.oauth.get(
       'https://userstream.twitter.com/1.1/user.json?replies=all',
-      // 'https://stream.twitter.com/1.1/statuses/sample.json',
       this.accessToken,
       this.accessTokenSecret
     );

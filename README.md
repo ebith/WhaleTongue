@@ -1,6 +1,5 @@
 # WhaleTongue
-[![こんな感じ](https://i.gyazo.com/3bb1e5521a890876dd95bda44dcc5d31.gif)](https://gyazo.com/3bb1e5521a890876dd95bda44dcc5d31)
-[![ツイートする時](https://i.gyazo.com/13edcd3e318953e88a0367ffb89cc8a5.png)](https://gyazo.com/13edcd3e318953e88a0367ffb89cc8a5)
+[![statuses/sample](https://i.gyazo.com/b1df7503ef5dd53552c56d1101fcf537.gif)](https://gyazo.com/b1df7503ef5dd53552c56d1101fcf537)
 
 - 短文であるほど文字がでかくなる
 - 画像とか動画を小窓で表示
