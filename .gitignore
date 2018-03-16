@@ -3,3 +3,4 @@ dist/bundle.js
 dist/main.js
 tmp/
 build/
+yarn-error.log

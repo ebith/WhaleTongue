@@ -1,8 +1,8 @@
 const path = require('path');
 const merge = require('webpack-merge');
-const base = require('./webpack.config.base.js');
+const common = require('./webpack.config.common.js');
 
-module.exports = merge(base.config, {
+module.exports = (env, argv) => ({
   entry: './src/main.js',
   output: {
     filename: 'main.js',
@@ -11,7 +11,10 @@ module.exports = merge(base.config, {
   target: 'electron-main',
   node: {
     __dirname: false
-  }
+  },
+  module: {
+    rules: [
+      common.js,
+    ]
+  },
 });
-
-base.option(module.exports);

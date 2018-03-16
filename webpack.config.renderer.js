@@ -1,8 +1,8 @@
 const path = require('path');
 const merge = require('webpack-merge');
-const base = require('./webpack.config.base.js');
+const common = require('./webpack.config.common.js');
 
-module.exports = merge(base.config, {
+module.exports = (env, argv) => ({
   entry: './src/renderer.js',
   output: {
     filename: 'bundle.js',
@@ -11,6 +11,7 @@ module.exports = merge(base.config, {
   target: 'electron-renderer',
   module: {
     rules: [
+      common.js,
       {
         test: /\.scss$/,
         exclude: /node_modules/,
@@ -24,7 +25,5 @@ module.exports = merge(base.config, {
         ]
       }
     ]
-  }
+  },
 });
-
-base.option(module.exports);
