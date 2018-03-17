@@ -1,40 +1,56 @@
-import React, { Component } from 'react';
-import { render } from 'react-dom';
+import React, {Component} from 'react';
+import {render} from 'react-dom';
 import Store from 'electron-store';
-import { Fabric } from 'office-ui-fabric-react/lib/Fabric';
+import {Fabric} from 'office-ui-fabric-react/lib/Fabric';
 import Twitter from './lib/twitter';
-import { Timeline } from './components/timeline';
+import {Timeline} from './components/timeline';
 import KeyBind from './keybind';
-import './app.scss';
-import { TweetModal } from './components/tweet-modal';
+import './app.scss'; // eslint-disable-line import/no-unassigned-import
+import TweetModal from './components/tweet-modal';
+
+const store = new Store();
+const config = {
+  consumerKey: store.get('keys.consumer'),
+  consumerSecret: store.get('keys.consumerSecret'),
+  accessToken: store.get('tokens.access'),
+  accessTokenSecret: store.get('tokens.accessSecret'),
+};
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
       tweets: [],
-      showModal: false
+      showModal: false,
     };
 
     this.keybind = new KeyBind(store.get('keyBind'), event => {
       switch (event) {
         case 'openTweetModal':
-          this.setState({ showModal: true });
+          this.setState({showModal: true});
           break;
+        default:
       }
     });
 
     this.t = new Twitter(config);
     this.t.on('notice', msg => {
-      const tweets = [msg].concat(this.state.tweets);
-      this.setState({ tweets });
+      this.setState(prevState => {
+        const tweets = [msg].concat(prevState.tweets);
+        if (tweets.length > 1000) {
+          tweets.pop();
+        }
+        return {tweets};
+      });
     });
     this.t.on('tweet', tweet => {
-      const tweets = [tweet].concat(this.state.tweets);
-      if (tweets.length > 1000) {
-        tweets.pop();
-      }
-      this.setState({ tweets });
+      this.setState(prevState => {
+        const tweets = [tweet].concat(prevState.tweets);
+        if (tweets.length > 1000) {
+          tweets.pop();
+        }
+        return {tweets};
+      });
     });
     this.t.connect();
 
@@ -42,7 +58,7 @@ class App extends Component {
     //   console.log(user.status.text);
     // });
     this.t.getTimeline(timeline => {
-      this.setState({ tweets: timeline });
+      this.setState({tweets: timeline});
     });
     // This.state = { tweets:
     //   require('../../statuses2.json').map(status => {
@@ -52,7 +68,7 @@ class App extends Component {
   }
 
   closeModal() {
-    this.setState({ showModal: false });
+    this.setState({showModal: false});
   }
 
   updateStatus(text, callback) {
@@ -72,14 +88,5 @@ class App extends Component {
     );
   }
 }
-
-const store = new Store();
-
-const config = {
-  consumerKey: store.get('keys.consumer'),
-  consumerSecret: store.get('keys.consumerSecret'),
-  accessToken: store.get('tokens.access'),
-  accessTokenSecret: store.get('tokens.accessSecret')
-};
 
 render(<App config={config} />, document.getElementById('root'));

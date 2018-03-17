@@ -1,20 +1,17 @@
 const path = require('path');
-const merge = require('webpack-merge');
 const common = require('./webpack.config.common.js');
 
-module.exports = (env, argv) => ({
+module.exports = {
   entry: './src/main.js',
   output: {
     filename: 'main.js',
-    path: path.resolve(__dirname, 'dist')
+    path: path.resolve(__dirname, 'dist'),
   },
   target: 'electron-main',
   node: {
-    __dirname: false
+    __dirname: false,
   },
   module: {
-    rules: [
-      common.js,
-    ]
+    rules: [common.js],
   },
-});
+};

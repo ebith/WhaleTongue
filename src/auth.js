@@ -1,8 +1,8 @@
-import { BrowserWindow, shell, ipcMain } from 'electron';
+import {BrowserWindow, shell, ipcMain} from 'electron';
 import path from 'path';
 import url from 'url';
 import Store from 'electron-store';
-import { OAuth } from 'oauth';
+import {OAuth} from 'oauth';
 
 export default class Auth {
   constructor(callback) {
@@ -19,6 +19,9 @@ export default class Auth {
       'HMAC-SHA1'
     );
     oauth.getOAuthRequestToken((err, requestToken, requestTokenSecret) => {
+      if (err) {
+        console.log(err);
+      }
       const url = `https://api.twitter.com/oauth/authorize?force_login=true&oauth_token=${requestToken}`;
       const win = this.createWindow();
       shell.openExternal(url);
@@ -30,7 +33,10 @@ export default class Auth {
             requestTokenSecret,
             pin.trim(),
             (err, accessToken, accessTokenSecret, results) => {
-              store.set('tokens', { access: accessToken, accessSecret: accessTokenSecret });
+              if (err) {
+                console.log(err);
+              }
+              store.set('tokens', {access: accessToken, accessSecret: accessTokenSecret});
               store.set('user_id', results.user_id);
               store.set('screen_name', results.screen_name);
               win.close();
@@ -43,8 +49,9 @@ export default class Auth {
       });
     });
   }
+
   createWindow() {
-    let win = new BrowserWindow({ width: 200, height: 100 });
+    let win = new BrowserWindow({width: 200, height: 100});
     win.on('closed', () => {
       win = null;
     });
@@ -52,7 +59,7 @@ export default class Auth {
       url.format({
         pathname: path.join(__dirname, 'dialog.html'),
         protocol: 'file:',
-        slashes: true
+        slashes: true,
       })
     );
     return win;

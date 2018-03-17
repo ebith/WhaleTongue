@@ -5,6 +5,11 @@
   font-family: BlinkMacSystemFont, 'Yu Gothic Medium', sans-serif !important;
 }
 
+// Kill focus ring
+* {
+  outline: none;
+}
+
 .tweet-itemCell {
   box-sizing: border-box;
   border-bottom: 1px solid $ms-color-neutralTertiaryAlt;

@@ -1,8 +1,8 @@
-import { app, BrowserWindow, shell } from 'electron';
+import {app, BrowserWindow, shell} from 'electron';
 import path from 'path';
 import url from 'url';
-import os from 'os';
 import Store from 'electron-store';
+import loadDevtool from 'electron-load-devtool';
 import Auth from './auth';
 
 let win;
@@ -13,34 +13,28 @@ const store = new Store({
   defaults: {
     keys: {
       consumer: 'MCwckohMuzkDTOc2gT0t0WgNM',
-      consumerSecret: 'gKnudp6Xo0FTPhnspM0J9w6oo6FOqA88jdSFp0bdEQxLCrWr8v'
+      consumerSecret: 'gKnudp6Xo0FTPhnspM0J9w6oo6FOqA88jdSFp0bdEQxLCrWr8v',
     },
     bounds: {
       width: 400,
-      height: 800
-    }
-  }
+      height: 800,
+    },
+  },
 });
 
 const createWindow = () => {
-  const { width, height, x, y } = store.get('bounds');
-  win = new BrowserWindow({ title: 'WhaleTongue', width, height, x, y });
+  const {width, height, x, y} = store.get('bounds');
+  win = new BrowserWindow({title: 'WhaleTongue', width, height, x, y});
 
   if (process.env.NODE_ENV === 'development') {
-    const reactDevTools = path.resolve(
-      os.homedir(),
-      'Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/3.1.0_0'
-    );
-    BrowserWindow.addDevToolsExtension(reactDevTools);
-    win.webContents.openDevTools({ mode: 'bottom' });
+    loadDevtool(loadDevtool.REACT_DEVELOPER_TOOLS);
+    win.webContents.openDevTools({mode: 'undock'});
   }
 
   win.webContents.on('new-window', (event, url) => {
     event.preventDefault();
-    if (!/\.(jpg|png|gif|mp4)$/.test(url)) {
-      shell.openExternal(url);
-    } else {
-      const popup = new BrowserWindow({ show: false });
+    if (/\.(jpg|png|gif|mp4)$/.test(url)) {
+      const popup = new BrowserWindow({show: false});
       popup.once('ready-to-show', () => {
         popup.webContents.executeJavaScript(`
           const style = document.createElement('style');
@@ -69,6 +63,8 @@ const createWindow = () => {
       });
       popup.loadURL(url);
       event.newGuest = popup;
+    } else {
+      shell.openExternal(url);
     }
   });
 
@@ -86,7 +82,7 @@ const createWindow = () => {
     url.format({
       pathname: path.join(__dirname, 'index.html'),
       protocol: 'file:',
-      slashes: true
+      slashes: true,
     })
   );
 };
@@ -96,6 +92,7 @@ app.on('ready', () => {
   if (tokens) {
     createWindow();
   } else {
+    // eslint-disable-next-line no-unused-vars
     const auth = new Auth(() => {
       createWindow();
     });

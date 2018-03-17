@@ -11,12 +11,12 @@ module.exports = {
             '@babel/preset-env',
             {
               targets: {
-                electron: '2.0'
-              }
-            }
-          ]
-        ]
-      }
-    }
+                electron: '2.0',
+              },
+            },
+          ],
+        ],
+      },
+    },
   },
 };

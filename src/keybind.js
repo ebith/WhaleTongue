@@ -1,5 +1,3 @@
-import { TweetModal } from './components/tweet-modal';
-
 export default class KeyBind {
   constructor(config, emitter) {
     let lastEvent;
@@ -23,22 +21,27 @@ export default class KeyBind {
         case 'G':
           this.scrollToBottom(event);
           break;
+        default:
       }
       lastEvent = event;
     });
   }
+
   prevTweet(event) {
     event.preventDefault();
   }
+
   nextTweet(event) {
     event.preventDefault();
   }
+
   scrollToTop(event) {
     event.preventDefault();
-    document.querySelector('#root').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.querySelector('#root').scrollIntoView({behavior: 'smooth', block: 'start'});
   }
+
   scrollToBottom(event) {
     event.preventDefault();
-    document.querySelector('#root').scrollIntoView({ behavior: 'smooth', block: 'end' });
+    document.querySelector('#root').scrollIntoView({behavior: 'smooth', block: 'end'});
   }
 }
