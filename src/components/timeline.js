@@ -128,7 +128,7 @@ Extra.defaultProps = {
 export class Text extends Component {
   html(html_text, quoted) {
     if (quoted) {
-      return {__html: html_text + ` >> @${quoted.screen_name}: ${quoted.htmlText}`};
+      return {__html: html_text + ` >> @${quoted.screen_name}: ${quoted.html_text}`};
     }
     return {__html: html_text};
   }
@@ -138,7 +138,7 @@ export class Text extends Component {
 
     const canvas = document.querySelector('canvas');
     const context = canvas.getContext('2d');
-    context.font = '"Yu Gothic", YuGothic';
+    context.font = 'BlinkMacSystemFont, "Yu Gothic Medium"';
     const width = context.measureText(quoted ? text + quoted.text : text).width;
     let widthClass;
     if (width < 80) {

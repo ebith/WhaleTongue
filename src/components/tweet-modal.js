@@ -23,7 +23,7 @@ const TweetModal = ({isOpen, onClose, onUpdateStatus}) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onDissmiss={onClose} containerClassName="tweet-modal">
+    <Modal isOpen={isOpen} onDismiss={onClose} containerClassName="tweet-modal">
       <TextField
         label="What's happening?"
         multiline

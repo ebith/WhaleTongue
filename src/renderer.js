@@ -14,6 +14,7 @@ const config = {
   consumerSecret: store.get('keys.consumerSecret'),
   accessToken: store.get('tokens.access'),
   accessTokenSecret: store.get('tokens.accessSecret'),
+  sampleStream: store.get('sampleStream'),
 };
 
 class App extends Component {
@@ -54,13 +55,11 @@ class App extends Component {
     });
     this.t.connect();
 
-    // T.getLastStatus(config.screen_name, user => {
-    //   console.log(user.status.text);
-    // });
     this.t.getTimeline(timeline => {
       this.setState({tweets: timeline});
     });
-    // This.state = { tweets:
+
+    // this.state = { tweets:
     //   require('../../statuses2.json').map(status => {
     //     return t.processStatus(status);
     //   })

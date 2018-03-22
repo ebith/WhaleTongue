@@ -2,6 +2,9 @@ export default class KeyBind {
   constructor(config, emitter) {
     let lastEvent;
     document.addEventListener('keydown', event => {
+      if (event.target.tagName !== 'BODY') {
+        return;
+      }
       switch (event.key) {
         case 'i':
           event.preventDefault();

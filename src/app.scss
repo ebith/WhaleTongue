@@ -40,8 +40,8 @@
 
 .tweet-profile-image {
   height: 100%;
-  padding-top: 3px;
-  padding-bottom: 3px;
+  padding-top: 2px;
+  padding-bottom: 2px;
   img {
     border-radius: 4px;
   }
@@ -59,12 +59,16 @@
   font-size: $ms-font-size-m-plus - 0.5px;
 }
 
+.middle {
+  font-size: $ms-font-size-m-plus + 0.5px;
+}
+
 .short {
   font-size: $ms-font-size-m-plus + 2px;
 }
 
 .tooShort {
-  font-size: $ms-font-size-m-plus + 7px;
+  font-size: $ms-font-size-m-plus + 6.5px;
 }
 
 .fuckingShort {
@@ -121,7 +125,7 @@
 }
 
 body {
-  margin: 0 4px;
+  margin: 0 2px;
 }
 
 .flex-box {

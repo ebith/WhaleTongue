@@ -18,6 +18,7 @@ export default class Twitter extends EventEmitter {
       null,
       'HMAC-SHA1'
     );
+    this.sampleStream = config.sampleStream;
   }
 
   connect() {
@@ -32,7 +33,9 @@ export default class Twitter extends EventEmitter {
       this.stream.abort();
     }
     this.stream = this.oauth.get(
-      'https://userstream.twitter.com/1.1/user.json?replies=all',
+      this.sampleStream
+        ? 'https://stream.twitter.com/1.1/statuses/sample.json'
+        : 'https://userstream.twitter.com/1.1/user.json?replies=all',
       this.accessToken,
       this.accessTokenSecret
     );
@@ -64,7 +67,12 @@ export default class Twitter extends EventEmitter {
               console.log(line);
             }
             if (status.text || status.event) {
-              this.emit('tweet', this.processStatus(status));
+              // Slow down sample stream
+              if (this.sampleStream && Math.floor(Math.random() * (12 - 0 + 1)) + 0 === 0) {
+                this.emit('tweet', this.processStatus(status));
+              } else {
+                this.emit('tweet', this.processStatus(status));
+              }
             } else if (status.friends) {
               this.emit('ready');
             } else {
@@ -218,6 +226,26 @@ export default class Twitter extends EventEmitter {
         }
       }
       status.retweeted_status.html_text = linkify(status.retweeted_status.text, status.retweeted_status.entities);
+
+      if (status.retweeted_status.quoted_status) {
+        if (status.retweeted_status.quoted_status.extended_tweet) {
+          status.retweeted_status.quoted_status.text = status.retweeted_status.quoted_status.extended_tweet.full_text;
+          status.retweeted_status.quoted_status.entities =
+            status.retweeted_status.quoted_status.extended_tweet.entities;
+        } else {
+          if (status.retweeted_status.quoted_status.extended_entities) {
+            status.retweeted_status.quoted_status.entities.media =
+              status.retweeted_status.quoted_status.extended_entities.media;
+          }
+          if (status.retweeted_status.quoted_status.full_text) {
+            status.retweeted_status.quoted_status.text = status.retweeted_status.quoted_status.full_text;
+          }
+        }
+        status.retweeted_status.quoted_status.html_text = linkify(
+          status.retweeted_status.quoted_status.text,
+          status.retweeted_status.quoted_status.entities
+        );
+      }
     }
 
     if (status.quoted_status) {
@@ -252,6 +280,14 @@ export default class Twitter extends EventEmitter {
           screen_name: status.user.screen_name,
         },
       };
+
+      if (status.retweeted_status.quoted_status) {
+        tweet.quoted = {
+          name: status.retweeted_status.quoted_status.user.name,
+          screen_name: status.retweeted_status.quoted_status.user.screen_name,
+          html_text: status.retweeted_status.quoted_status.html_text,
+        };
+      }
     } else {
       tweet = {
         protected: status.user.protected,
