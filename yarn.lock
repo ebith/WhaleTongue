@@ -7695,6 +7695,10 @@ tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
 
+twemoji@^2.5.1:
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/twemoji/-/twemoji-2.5.1.tgz#296647c6163c7f047458871c2aebe25ea8ffe834"
+
 twitter-text@^2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/twitter-text/-/twitter-text-2.0.4.tgz#c4ba67e0ed8eb9cd6998921fd4e53c6a82798943"

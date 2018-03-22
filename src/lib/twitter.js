@@ -2,6 +2,7 @@
 import EventEmitter from 'events';
 import {OAuth} from 'oauth';
 import {autoLink} from 'twitter-text';
+import twemoji from 'twemoji';
 
 export default class Twitter extends EventEmitter {
   constructor(config) {
@@ -134,6 +135,25 @@ export default class Twitter extends EventEmitter {
 
   // eslint-disable-next-line complexity
   processStatus(status) {
+    const collectUrlEntity = entities => {
+      let urlEntities = [];
+      if (entities.media) {
+        urlEntities = entities.media;
+      }
+      if (entities.urls) {
+        urlEntities = urlEntities.concat(entities.urls);
+      }
+      return urlEntities;
+    };
+
+    const linkify = (text, entities) => {
+      const linked = autoLink(text, {
+        urlEntities: collectUrlEntity(entities || {}),
+        usernameIncludeSymbol: true,
+      });
+      return twemoji.parse(linked);
+    };
+
     if (status.event) {
       const tweet = {
         timestamp: status.created_at,
@@ -180,24 +200,6 @@ export default class Twitter extends EventEmitter {
       tweet.html_text = autoLink(tweet.text, {usernameIncludeSymbol: true});
       return tweet;
     }
-
-    const collectUrlEntity = entities => {
-      let urlEntities = [];
-      if (entities.media) {
-        urlEntities = entities.media;
-      }
-      if (entities.urls) {
-        urlEntities = urlEntities.concat(entities.urls);
-      }
-      return urlEntities;
-    };
-
-    const linkify = (text, entities) => {
-      return autoLink(text, {
-        urlEntities: collectUrlEntity(entities || {}),
-        usernameIncludeSymbol: true,
-      });
-    };
 
     if (status.extended_tweet) {
       status.text = status.extended_tweet.full_text;
