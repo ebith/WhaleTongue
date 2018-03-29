@@ -31,6 +31,8 @@ const createWindow = () => {
     win.webContents.openDevTools({mode: 'undock'});
   }
 
+  win.alwaysOnTop(store.get('alwaysOnTop'));
+
   win.webContents.on('new-window', (event, url) => {
     event.preventDefault();
     if (/\.(jpg|png|gif|mp4)$/.test(url)) {

@@ -4,6 +4,7 @@ import {get} from 'axios';
 
 export default class OgpThumbnail extends Component {
   componentDidMount() {
+    console.log(this.props.entities.urls);
     (async () => {
       const list = ['www.youtube.com/watch', 'youtu.be', 'www.nicovideo.jp/watch', 'nico.ms', 'gyazo.com'];
       const re = new RegExp(

@@ -115,14 +115,16 @@ export const Extra = ({retweeter, id, timestamp, locked, event}) => {
 };
 Extra.propTypes = {
   retweeter: PropTypes.object,
-  id: PropTypes.string.isRequired,
+  id: PropTypes.string,
   timestamp: PropTypes.string.isRequired,
-  locked: PropTypes.bool.isRequired,
+  locked: PropTypes.bool,
   event: PropTypes.string,
 };
 Extra.defaultProps = {
   retweeter: null,
   event: null,
+  locked: false,
+  id: null,
 };
 
 export class Text extends Component {

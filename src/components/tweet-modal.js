@@ -13,7 +13,7 @@ const TweetModal = ({isOpen, onClose, onUpdateStatus}) => {
   };
 
   const handleKeyDown = event => {
-    if (event.key === 'Enter' && event.ctrlKey) {
+    if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
       onUpdateStatus(event.target.value, () => {
         onClose();
       });
