@@ -31,7 +31,7 @@ const createWindow = () => {
     win.webContents.openDevTools({mode: 'undock'});
   }
 
-  win.alwaysOnTop(store.get('alwaysOnTop'));
+  win.setAlwaysOnTop(store.get('alwaysOnTop') || false);
 
   win.webContents.on('new-window', (event, url) => {
     event.preventDefault();
