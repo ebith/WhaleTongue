@@ -6,14 +6,48 @@ import OgpThumbnail from './ogp-thumbnail';
 
 export const Media = ({entities}) => {
   const twimg = Boolean(entities.media);
-  const urls = entities.urls ? entities.urls.length > 0 : false;
-  return (
-    <div>
-      {twimg && <TwitterMedia entities={entities} />}
-      {!twimg && urls && <ExternalMedia entities={entities} />}
-      {!twimg && urls && <OgpThumbnail entities={entities} />}
-    </div>
-  );
+
+  const externalMedia = [];
+  for (const entity of entities.urls) {
+    if (/\.(jpg|png|gif)$/.test(entity.expanded_url)) {
+      externalMedia.push(
+        <a key={entity.display_url} href={entity.expanded_url}>
+          <img src={entity.expanded_url} />
+        </a>
+      );
+    }
+  }
+
+  let jsx = null;
+  if (twimg) {
+    jsx = (
+      <div>
+        <TwitterMedia entities={entities} />
+      </div>
+    );
+  } else if (externalMedia.length > 0) {
+    jsx = (
+      <div>
+        <div className="external-media">{externalMedia}</div>
+      </div>
+    );
+  } else if (entities.urls.length > 0) {
+    const list = ['www.youtube.com/watch', 'youtu.be', 'www.nicovideo.jp/watch', 'nico.ms', 'gyazo.com', 'imgur.com'];
+    const re = new RegExp(
+      list
+        .map(url => {
+          return `^https?://${url}`;
+        })
+        .join('|')
+    );
+
+    jsx = re.test(entities.urls[0].expanded_url) ? (
+      <div>
+        <OgpThumbnail entities={entities} />
+      </div>
+    ) : null;
+  }
+  return jsx;
 };
 Media.propTypes = {
   entities: PropTypes.object.isRequired,
@@ -56,26 +90,6 @@ export const TwitterMedia = ({entities}) => {
   return <div className="tweet-media">{media}</div>;
 };
 TwitterMedia.propTypes = {
-  entities: PropTypes.object.isRequired,
-};
-
-export const ExternalMedia = ({entities}) => {
-  const media = [];
-  for (const entity of entities.urls) {
-    if (/\.(jpg|png|gif)$/.test(entity.expanded_url)) {
-      media.push(
-        <a key={entity.display_url} href={entity.expanded_url}>
-          <img src={entity.expanded_url} />
-        </a>
-      );
-    }
-  }
-  if (media.length > 0) {
-    return <div className="external-media">{media}</div>;
-  }
-  return null;
-};
-ExternalMedia.propTypes = {
   entities: PropTypes.object.isRequired,
 };
 
