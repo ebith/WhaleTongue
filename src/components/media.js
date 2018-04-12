@@ -11,7 +11,7 @@ export const Media = ({entities}) => {
   for (const entity of entities.urls) {
     if (/\.(jpg|png|gif)$/.test(entity.expanded_url)) {
       externalMedia.push(
-        <a key={entity.display_url} href={entity.expanded_url}>
+        <a key={entity.expanded_url} href={entity.expanded_url}>
           <img src={entity.expanded_url} />
         </a>
       );
