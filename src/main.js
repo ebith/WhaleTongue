@@ -1,6 +1,6 @@
 import {app, BrowserWindow, shell} from 'electron';
 import path from 'path';
-import url from 'url';
+import libUrl from 'url';
 import Store from 'electron-store';
 import loadDevtool from 'electron-load-devtool';
 import Auth from './auth';
@@ -35,7 +35,8 @@ const createWindow = () => {
 
   win.webContents.on('new-window', (event, url) => {
     event.preventDefault();
-    if (/\.(jpg|png|gif|mp4)$/.test(url)) {
+    const pathname = new libUrl.URL(url).pathname;
+    if (/\.(jpg|png|gif|mp4)$/.test(pathname)) {
       const popup = new BrowserWindow({show: false});
       popup.once('ready-to-show', () => {
         popup.webContents.executeJavaScript(`
@@ -81,7 +82,7 @@ const createWindow = () => {
   });
 
   win.loadURL(
-    url.format({
+    libUrl.format({
       pathname: path.join(__dirname, 'index.html'),
       protocol: 'file:',
       slashes: true,
